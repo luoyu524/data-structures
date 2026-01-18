@@ -1,0 +1,87 @@
+﻿#pragma once
+#include"hashmap.h"
+
+namespace lydly
+{
+	template<class K, class Hash = HashFunc<K>>
+	class unordered_set
+	{
+
+		struct SetKeyOfT
+		{
+			const K& operator()(const K& k)
+			{
+				return k;
+			}
+		};
+
+	public:
+		typedef typename hash_bucket::HashTable<K, const K, SetKeyOfT, Hash>::Iterator iterator;
+		typedef typename hash_bucket::HashTable<K, const K, SetKeyOfT, Hash>::ConstIterator const_iterator;
+
+		iterator begin()
+		{
+			return _ht.Begin();
+		}
+
+		iterator end()
+		{
+			return _ht.End();
+		}
+
+		const_iterator begin() const
+		{
+			return _ht.Begin();
+		}
+
+		const_iterator end() const
+		{
+			return _ht.End();
+		}
+
+		pair<iterator, bool> insert(const K& key)
+		{
+			return _ht.Insert(key);
+		}
+
+		iterator find(const K& key)
+		{
+			return _ht.Find(key);
+		}
+
+		bool erase(const K& key)
+		{
+			return _ht.Erase(key);
+		}
+
+
+	private:
+		hash_bucket::HashTable<K, const K, SetKeyOfT, Hash> _ht;
+
+	};
+
+	//
+	void test_set()
+	{
+		unordered_set<int> s;
+		int a[] = { 4, 2, 6, 1, 3, 5, 15, 7, 16, 14, 3,3,15 };
+		for (auto e : a)
+		{
+			s.insert(e);
+		}
+		for (auto e : s)
+		{
+			cout << e << " ";
+		}
+		cout << endl;
+		unordered_set<int>::iterator it = s.begin();
+		while (it != s.end())
+		{
+			// 不⽀持修改
+			//*it += 1;
+			cout << *it << " ";
+			++it;
+		}
+		cout << endl;
+	}
+}
